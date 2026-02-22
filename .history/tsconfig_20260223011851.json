@@ -10,7 +10,7 @@
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "forceConsistentCasingInFileNames": true,  //add this by chatgpt solution
+    "forceConsistentCasingInFileNames": true,  //add this
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
