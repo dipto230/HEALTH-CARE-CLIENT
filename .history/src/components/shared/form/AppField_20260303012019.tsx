@@ -63,7 +63,7 @@ const AppField = ({
                     className={cn(
                         prepend && "pl-10",
                         append && "pr-10",
-                        hasError && "border-destructive focus-visible::ring-destructive/20"
+                        hasError && 
                     )}
                 />
                 {
