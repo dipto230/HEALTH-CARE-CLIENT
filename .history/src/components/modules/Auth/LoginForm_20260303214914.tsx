@@ -16,7 +16,6 @@ import { useState } from "react";
 interface LoginFormProps {
     redirectPath ?: string;
 }
-
 const LoginForm = ({ redirectPath }: LoginFormProps) => {
     // const queryClient = useQueryClient();
 
@@ -24,7 +23,7 @@ const LoginForm = ({ redirectPath }: LoginFormProps) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const { mutateAsync , isPending} = useMutation({
-        mutationFn : (payload : ILoginPayload) => loginAction(payload, redirectPath),
+        mutationFn : (payload : ILoginPayload) => loginAction(payload,redirectPath),
     })
 
     const form = useForm({

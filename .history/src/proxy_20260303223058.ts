@@ -1,12 +1,19 @@
-import { NextRequest, NextResponse } from "next/server";
+
+import { NextRequest, NextResponse } from "next/server"
 import { getDefaultDashboardRoute, getRouteOwner, isAuthRoute, UserRole } from "./lib/authUtils";
 import { jwtUtils } from "./lib/jwtUtils";
 import { isTokenExpiringSoon } from "./lib/tokenUtils";
-import { getNewTokensWithRefreshToken, getUserInfo } from "./services/auth.services";
+import { getNewTokensWithRefreshToken } from "./services/Auth.services";
+
+
+
+
+
+
 
 async function refreshTokenMiddleware (refreshToken : string) : Promise<boolean> {
     try {
-        const refresh = await getNewTokensWithRefreshToken(refreshToken);
+        const refresh = await getNewTokensWithRefreshToken(refreshToken)(refreshToken);
         if(!refresh){
             return false;
         }
@@ -16,8 +23,6 @@ async function refreshTokenMiddleware (refreshToken : string) : Promise<boolean>
         return false;   
     }
 }
-
-
 export async function proxy (request : NextRequest) {
    try {
        const { pathname } = request.nextUrl; // eg /dashboard, /admin/dashboard, /doctor/dashboard
@@ -182,6 +187,7 @@ export async function proxy (request : NextRequest) {
    }
 }
 
+
 export const config = {
     matcher : [
         /*
@@ -193,4 +199,4 @@ export const config = {
          */
         '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.well-known).*)',
     ]
-} 
+}

@@ -1,9 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { getNewTokensWithRefreshToken } from '@/services/auth.services';
 import { ApiResponse } from '@/types/api.types';
 import axios from 'axios';
-import { cookies, headers } from 'next/headers';
-import { isTokenExpiringSoon } from '../tokenUtils';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -33,27 +29,12 @@ async function tryRefreshToken(
     }
 }
 
-const axiosInstance = async () => {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get("accessToken")?.value;
-    const refreshToken = cookieStore.get("refreshToken")?.value;
-
-    if(accessToken && refreshToken){
-        await tryRefreshToken(accessToken, refreshToken);
-    }
-
-    const cookieHeader = cookieStore
-                                .getAll()
-                                .map((cookie) => `${cookie.name}=${cookie.value}`)
-                                .join("; ");    
-    // eg Cookie: "accessToken=abc123; refreshToken=def456"
-
+const axiosInstance = () => {
     const instance = axios.create({
         baseURL : API_BASE_URL,
         timeout : 30000,
         headers:{
             'Content-Type' : 'application/json',
-            Cookie : cookieHeader
         }
     })
 
@@ -65,9 +46,9 @@ export interface ApiRequestOptions {
     headers?: Record<string, string>;
 }
 
-const httpGet = async <TData>(endpoint: string, options?: ApiRequestOptions) : Promise<ApiResponse<TData>> => {
-    try {     
-        const instance = await axiosInstance();   
+const httpGet = async <TData>(endpoint: string, options?: ApiRequestOptions):Promise<ApiResponse<TData>> => {
+    try {  
+        const instance = axiosInstance()
         const response = await instance.get<ApiResponse<TData>>(endpoint, {
             params: options?.params,
             headers: options?.headers,
@@ -79,10 +60,9 @@ const httpGet = async <TData>(endpoint: string, options?: ApiRequestOptions) : P
     }
 }
 
-const httpPost = async <TData>(endpoint: string, data: unknown, options?: ApiRequestOptions) : Promise<ApiResponse<TData>> => {
+const httpPost = async <TData>(endpoint: string, data: unknown, options?: ApiRequestOptions):Promise<ApiResponse<TData>> => {
     try {
-        const instance = await axiosInstance();
-        const response = await instance.post<ApiResponse<TData>>(endpoint, data, {
+        const response = await axiosInstance().post<ApiResponse<TData>>(endpoint, data, {
             params: options?.params,
             headers: options?.headers,
         });
@@ -93,10 +73,9 @@ const httpPost = async <TData>(endpoint: string, data: unknown, options?: ApiReq
     }
 }
 
-const httpPut = async <TData>(endpoint: string, data: unknown, options?: ApiRequestOptions) : Promise<ApiResponse<TData>> => {
+const httpPut = async <TData>(endpoint: string, data: unknown, options?: ApiRequestOptions):Promise<ApiResponse<TData>> => {
     try {
-        const instance = await axiosInstance();
-        const response = await instance.put<ApiResponse<TData>>(endpoint, data, {
+        const response = await axiosInstance().put<ApiResponse<TData>>(endpoint, data, {
             params: options?.params,
             headers: options?.headers,
         });
@@ -107,10 +86,9 @@ const httpPut = async <TData>(endpoint: string, data: unknown, options?: ApiRequ
     }
 }
 
-const httpPatch = async <TData>(endpoint: string, data: unknown, options?: ApiRequestOptions) : Promise<ApiResponse<TData>> => {
+const httpPatch = async <TData>(endpoint: string, data: unknown, options?: ApiRequestOptions):Promise<ApiResponse<TData>> => {
     try {
-        const instance = await axiosInstance();
-        const response = await instance.patch<ApiResponse<TData>>(endpoint, data, {
+        const response = await axiosInstance().patch<ApiResponse<TData>>(endpoint, data, {
             params: options?.params,
             headers: options?.headers,
         });
@@ -122,10 +100,9 @@ const httpPatch = async <TData>(endpoint: string, data: unknown, options?: ApiRe
     }
 }
 
-const httpDelete =  async <TData>(endpoint: string, options?: ApiRequestOptions) : Promise<ApiResponse<TData>> => {
+const httpDelete = async <TData>(endpoint: string, options?: ApiRequestOptions):Promise<ApiResponse<TData>> => {
     try {
-        const instance = await axiosInstance();
-        const response = await instance.delete<ApiResponse<TData>>(endpoint, {
+        const response = await axiosInstance().delete<ApiResponse<TData>>(endpoint, {
             params: options?.params,
             headers: options?.headers,
         });

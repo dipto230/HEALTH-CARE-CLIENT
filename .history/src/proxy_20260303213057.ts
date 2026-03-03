@@ -1,21 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getDefaultDashboardRoute, getRouteOwner, isAuthRoute, UserRole } from "./lib/authUtils";
-import { jwtUtils } from "./lib/jwtUtils";
-import { isTokenExpiringSoon } from "./lib/tokenUtils";
-import { getNewTokensWithRefreshToken, getUserInfo } from "./services/auth.services";
 
-async function refreshTokenMiddleware (refreshToken : string) : Promise<boolean> {
-    try {
-        const refresh = await getNewTokensWithRefreshToken(refreshToken);
-        if(!refresh){
-            return false;
-        }
-        return true;
-    } catch (error) {
-        console.error("Error refreshing token in middleware:", error);
-        return false;   
-    }
-}
+import { NextRequest, NextResponse } from "next/server"
+import { getDefaultDashboardRoute } from "./lib/authUtils";
 
 
 export async function proxy (request : NextRequest) {
@@ -182,6 +167,7 @@ export async function proxy (request : NextRequest) {
    }
 }
 
+
 export const config = {
     matcher : [
         /*
@@ -193,4 +179,4 @@ export const config = {
          */
         '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.well-known).*)',
     ]
-} 
+}
