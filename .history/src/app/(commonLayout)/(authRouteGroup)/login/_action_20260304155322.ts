@@ -1,0 +1,65 @@
+"use server";
+import { getDefaultDashboardRoute, isValidRedirectForRole, UserRole } from "@/lib/authUtils";
+import { httpClient } from "@/lib/axios/httpClient";
+import { setTokenInCookies } from "@/lib/tokenUtils";
+import { ApiErrorResponse } from "@/types/api.types";
+import { ILoginResponse } from "@/types/auth.types";
+import { ILoginPayload, loginZodSchema } from "@/zod/auth.validation";
+import { redirect } from "next/navigation";
+
+const isNextRedirect = (error: unknown): boolean =>
+  typeof error === "object" &&
+  error !== null &&
+  "digest" in error &&
+  typeof (error as any).digest === "string" &&
+  (error as any).digest.startsWith("NEXT_REDIRECT");
+
+export const loginAction = async (
+  payload: ILoginPayload,
+  redirectPath?: string
+): Promise<ILoginResponse | ApiErrorResponse> => {
+  const parsedPayload = loginZodSchema.safeParse(payload);
+  if (!parsedPayload.success) {
+    return {
+      success: false,
+      message: parsedPayload.error.issues[0].message || "Invalid input",
+    };
+  }
+
+  try {
+    const response = await httpClient.post<ILoginResponse>("/auth/login", parsedPayload.data);
+    const { accessToken, refreshToken, token, user } = response.data;
+    const { role, emailVerified, needPasswordChange, email } = user;
+
+    await setTokenInCookies("accessToken", accessToken);
+    await setTokenInCookies("refreshToken", refreshToken);
+    await setTokenInCookies("better-auth.session_token", token, 24 * 60 * 60);
+
+    if (needPasswordChange) {
+      redirect(`/reset-password?email=${email}`);
+    }
+
+    const targetPath =
+      redirectPath && isValidRedirectForRole(redirectPath, role as UserRole)
+        ? redirectPath
+        : getDefaultDashboardRoute(role as UserRole);
+
+    redirect(targetPath);
+
+  } catch (error: unknown) {
+    // Always re-throw Next.js internal redirects & not-found signals
+    if (isNextRedirect(error)) throw error;
+
+    const axiosError = error as any;
+
+    // Handle unverified email from API response
+    if (axiosError?.response?.data?.message === "Email not verified") {
+      redirect(`/verify-email?email=${payload.email}`);
+    }
+
+    return {
+      success: false,
+      message: axiosError?.response?.data?.message || axiosError?.message || "Login failed",
+    };
+  }
+};

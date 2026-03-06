@@ -20,27 +20,38 @@ async function refreshTokenMiddleware (refreshToken : string) : Promise<boolean>
 
 export async function proxy (request : NextRequest) {
    try {
-       const { pathname } = request.nextUrl; // eg /dashboard, /admin/dashboard, /doctor/dashboard
+       const { pathname } = request.nextUrl;
+       console.log("PATHNAME:", pathname);// eg /dashboard, /admin/dashboard, /doctor/dashboard
        const accessToken = request.cookies.get("accessToken")?.value;
        const refreshToken = request.cookies.get("refreshToken")?.value;
+
+         console.log("ACCESS TOKEN:", accessToken);
+    console.log("REFRESH TOKEN:", refreshToken);
 
        const decodedAccessToken =  accessToken && jwtUtils.verifyToken(accessToken, process.env.JWT_ACCESS_SECRET as string).data;
 
        const isValidAccessToken = accessToken && jwtUtils.verifyToken(accessToken, process.env.JWT_ACCESS_SECRET as string).success;
+         
+            console.log("TOKEN VALID:", isValidAccessToken);
+console.log("DECODED TOKEN:", decodedAccessToken);
 
        let userRole: UserRole | null = null;
+    
 
        if(decodedAccessToken){
             userRole = decodedAccessToken.role as UserRole;
        }
+          console.log("USER ROLE:", userRole);
 
        const routerOwner = getRouteOwner(pathname);
+       console.log("ROUTE OWNER:", routerOwner);
 
        const unifySuperAdminAndAdminRole = userRole === "SUPER_ADMIN" ? "ADMIN" : userRole;
 
        userRole = unifySuperAdminAndAdminRole;
 
        const isAuth = isAuthRoute(pathname);
+       console.log("IS AUTH ROUTE:", isAuth);
 
 
        //proactively refresh token if refresh token exists and access token is expired or about to expire
@@ -81,6 +92,7 @@ export async function proxy (request : NextRequest) {
 
        // Rule - 1 : User is logged in (has access token) and trying to access auth route -> allow
        if(isAuth && isValidAccessToken){
+        console.log("User already logged in → redirecting dashboard");
         return NextResponse.redirect(new URL(getDefaultDashboardRoute(userRole as UserRole), request.url));
        }
 
@@ -119,6 +131,7 @@ export async function proxy (request : NextRequest) {
 
        // Rule - 4 User is Not logged in but trying to access protected route -> redirect to login
        if(!accessToken || !isValidAccessToken){
+        console.log("User not logged in → redirect to login");
         const loginUrl = new URL("/login", request.url);
         loginUrl.searchParams.set("redirect", pathname);
         return NextResponse.redirect(loginUrl);
@@ -174,6 +187,7 @@ export async function proxy (request : NextRequest) {
                 return NextResponse.redirect(new URL(getDefaultDashboardRoute(userRole as UserRole), request.url));
             }
        }
+       console.log("ALLOW REQUEST:", pathname);
 
        return NextResponse.next();
 
@@ -193,4 +207,4 @@ export const config = {
          */
         '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.well-known).*)',
     ]
-} 
+}
