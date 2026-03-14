@@ -1,5 +1,4 @@
 
-import AdminDashboardContent from "@/components/modules/Dashboard/AdminDashboardContent";
 import { getDashboardData } from "@/services/dashboard.services";
 import { ApiResponse } from "@/types/api.types";
 import { IAdminDashboardData } from "@/types/dashboard.types";
