@@ -7,7 +7,6 @@ import { useQuery } from "@tanstack/react-query";
 import { doctorColumns } from "./doctorsColumns";
 
 
-
 const DoctorsTable = () => {
 
     // const doctorColumns : ColumnDef<IDoctor>[] = [

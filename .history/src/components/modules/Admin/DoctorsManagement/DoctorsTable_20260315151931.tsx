@@ -4,7 +4,6 @@ import DataTable from "@/components/shared/table/DataTable";
 import { getDoctors } from "@/services/doctor.services";
 import { IDoctor } from "@/types/doctor.types";
 import { useQuery } from "@tanstack/react-query";
-import { doctorColumns } from "./doctorsColumns";
 
 
 
