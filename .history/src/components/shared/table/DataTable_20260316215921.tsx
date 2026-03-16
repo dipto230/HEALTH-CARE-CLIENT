@@ -13,9 +13,8 @@ import DataTableFilters, {
   DataTableFilterValues,
 } from "./DataTableFilters";
 
-
-import DataTablePagination from "./DataTablePagination";
 import DataTableSearch from "./DataTableSearch";
+import DataTablePagination from "./DataTablePagination";
 
 interface DataTableActions<TData> {
     onView ?: (data : TData) => void;

@@ -19,12 +19,11 @@ import { useServerManagedDataTable } from "@/hooks/useServerManagedDataTable";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
-
-import { doctorColumns } from "./doctorsColumns";
 import CreateDoctorFormModal from "./CreateDoctorFormModal";
-import EditDoctorFormModal from "./EditDoctorFormModal";
 import DeleteDoctorConfirmationDialog from "./DeleteDoctorConfirmationDialog";
+import EditDoctorFormModal from "./EditDoctorFormModal";
 import ViewDoctorProfileDialog from "./ViewDoctorProfileDialog";
+import { doctorColumns } from "./doctorsColumns";
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;

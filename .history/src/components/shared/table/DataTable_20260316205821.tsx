@@ -12,8 +12,6 @@ import DataTableFilters, {
   DataTableFilterValue,
   DataTableFilterValues,
 } from "./DataTableFilters";
-
-
 import DataTablePagination from "./DataTablePagination";
 import DataTableSearch from "./DataTableSearch";
 

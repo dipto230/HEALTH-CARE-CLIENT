@@ -13,8 +13,6 @@ import DataTableFilters, {
   DataTableFilterValues,
 } from "./DataTableFilters";
 
-
-import DataTablePagination from "./DataTablePagination";
 import DataTableSearch from "./DataTableSearch";
 
 interface DataTableActions<TData> {

@@ -1,16 +1,9 @@
 "use client";
 
 import DataTable from "@/components/shared/table/DataTable";
-import {
-  DataTableFilterConfig,
-  DataTableFilterValues,
-} from "@/components/shared/table/DataTableFilters";
-import {
-  serverManagedFilter,
-  useServerManagedDataTableFilters,
-} from "@/hooks/useServerManagedDataTableFilters";
-import { useServerManagedDataTableSearch } from "@/hooks/useServerManagedDataTableSearch";
-import { useRowActionModalState } from "@/hooks/useRowActionModalState";
+
+
+
 import { getAllSpecialties, getDoctors } from "@/services/doctor.services";
 import { PaginationMeta } from "@/types/api.types";
 import { IDoctor } from "@/types/doctor.types";
@@ -19,12 +12,16 @@ import { useServerManagedDataTable } from "@/hooks/useServerManagedDataTable";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
-
-import { doctorColumns } from "./doctorsColumns";
 import CreateDoctorFormModal from "./CreateDoctorFormModal";
-import EditDoctorFormModal from "./EditDoctorFormModal";
 import DeleteDoctorConfirmationDialog from "./DeleteDoctorConfirmationDialog";
+import EditDoctorFormModal from "./EditDoctorFormModal";
 import ViewDoctorProfileDialog from "./ViewDoctorProfileDialog";
+import { doctorColumns } from "./doctorsColumns";
+import { DataTableFilterConfig, DataTableFilterValues } from "@/components/shared/table/DataTableFilters";
+import { serverManagedFilter, useServerManagedDataTableFilters } from "@/hooks/useServerManagedDataTableFilters";
+import { useServerManagedDataTableSearch } from "@/hooks/useServerManagedDataTableSearch";
+import { useRowActionModalState } from "@/hooks/useRowActionModalState";
+
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
@@ -49,7 +46,7 @@ const DoctorsTable = ({ initialQueryString }: { initialQueryString: string }) =>
       onViewOpenChange,
       onEditOpenChange,
       onDeleteOpenChange,
-      tableActions,
+      tableActions,()
     } = useRowActionModalState<IDoctor>();
 
     const {

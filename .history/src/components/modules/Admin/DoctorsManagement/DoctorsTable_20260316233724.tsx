@@ -22,9 +22,6 @@ import { useMemo } from "react";
 
 import { doctorColumns } from "./doctorsColumns";
 import CreateDoctorFormModal from "./CreateDoctorFormModal";
-import EditDoctorFormModal from "./EditDoctorFormModal";
-import DeleteDoctorConfirmationDialog from "./DeleteDoctorConfirmationDialog";
-import ViewDoctorProfileDialog from "./ViewDoctorProfileDialog";
 
 const DEFAULT_PAGE = 1;
 const DEFAULT_LIMIT = 10;
