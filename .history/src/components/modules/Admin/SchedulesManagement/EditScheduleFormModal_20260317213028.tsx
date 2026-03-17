@@ -14,7 +14,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { type ISchedule } from "@/types/schedule.types"
+import { type ISchedule } from "@/"
 import {
     editScheduleFormZodSchema,
     type IEditScheduleFormValues,

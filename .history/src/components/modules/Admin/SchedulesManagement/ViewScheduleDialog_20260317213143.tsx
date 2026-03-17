@@ -1,6 +1,6 @@
 "use client"
 
-import { getScheduleByIdAction } from "@/app/(dashboardLayout)/admin/dashboard/schedules-managment/_action"
+import { getScheduleByIdAction } from "@/app/(dashboardLayout)/admin/dashboard/"
 import { Badge } from "@/components/ui/badge"
 import {
     Dialog,

@@ -18,7 +18,7 @@ import { type ISchedule } from "@/types/schedule.types"
 import {
     editScheduleFormZodSchema,
     type IEditScheduleFormValues,
-} from "@/zod/schedule.validation"
+} from "@/zod/"
 import { useForm } from "@tanstack/react-form"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { format } from "date-fns"

@@ -1,6 +1,6 @@
 "use client"
 
-import { deleteScheduleAction } from "@/app/(dashboardLayout)/admin/dashboard/schedules-managment/_action"
+import { deleteScheduleAction } from "@/app/(dashboardLayout)/admin/dashboard/schedules-management/_action"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -11,7 +11,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { type ISchedule } from "@/types/schedule.types"
+import { type ISchedule } from "@/"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { format } from "date-fns"
 import { useRouter } from "next/navigation"
