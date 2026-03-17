@@ -1,14 +1,12 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { getDoctors } from "@/services/doctor.services";
 import { useQuery } from "@tanstack/react-query";
 
 const DoctorsList = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["doctors"],
-    queryFn: () => getDoctors(""),
+    queryFn: () => getDoctors(""), // queryString empty দিলে সব doctor আসবে
   });
 
   if (isLoading) {
@@ -16,11 +14,7 @@ const DoctorsList = () => {
   }
 
   if (isError) {
-    return (
-      <p className="text-center mt-10 text-red-500">
-        Something went wrong
-      </p>
-    );
+    return <p className="text-center mt-10 text-red-500">Something went wrong</p>;
   }
 
   return (
@@ -32,17 +26,14 @@ const DoctorsList = () => {
         >
           {/* ✅ Image optional */}
           {doctor.image && (
-            <div className="relative w-full h-40 mb-3">
-              <Image
-                src={doctor.image}
-                alt={doctor.name || "Doctor Image"}
-                fill
-                className="object-cover rounded-xl"
-              />
-            </div>
+            <img
+              src={doctor.image}
+              alt={doctor.name}
+              className="w-full h-40 object-cover rounded-xl mb-3"
+            />
           )}
 
-          {/* Info */}
+          {/* Doctor Info */}
           <h2 className="text-xl font-semibold">{doctor.name}</h2>
           <p className="text-gray-500">{doctor.qualification}</p>
           <p className="text-sm">
@@ -52,13 +43,10 @@ const DoctorsList = () => {
             Fee: ৳{doctor.appointmentFee || 0}
           </p>
 
-          {/* ✅ Link button */}
-          <Link
-            href={`/consultation/doctor/${doctor.id}`}
-            className="block mt-3 w-full text-center bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700"
-          >
-            View Details
-          </Link>
+          {/* Button */}
+          <button className="mt-3 w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700">
+            Book Appointment
+          </button>
         </div>
       ))}
     </div>
